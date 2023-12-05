@@ -6,25 +6,25 @@ class MyTestSuite : public CxxTest::TestSuite
 {
 
 public:
-    // void TestTrebuchet(void)
-    // {
-    //     int output;
-    //     int expected = 142;
-    //     std::string example_file = "./data/example_1.txt";
+    void TestTrebuchet(void)
+    {
+        int output;
+        int expected = 142;
+        std::string example_file = "./data/example_1.txt";
 
-    //     output = Trebuchet(example_file);
-    //     TS_ASSERT_EQUALS(output, expected);
-    // }
+        output = Trebuchet(example_file);
+        TS_ASSERT_EQUALS(output, expected);
+    }
 
-    // void TestReadStringAsInteger(void)
-    // {
-    //     int output;
-    //     int expected = 281;
-    //     std::string example_file = "./data/example_2.txt";
+    void TestReadStringAsInteger(void)
+    {
+        int output;
+        int expected = 281;
+        std::string example_file = "./data/example_2.txt";
 
-    //     output = ReadStringAsInt(example_file);
-    //     TS_ASSERT_EQUALS(output, expected);
-    // }
+        output = ReadStringAsInt(example_file);
+        TS_ASSERT_EQUALS(output, expected);
+    }
 
      void TestMyExample1(void)
     {

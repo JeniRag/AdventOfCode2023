@@ -3,8 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include <map>
-#include <numeric>
-#include <bits/stdc++.h> 
+#include <numeric> //for summing ab vector
+#include <bits/stdc++.h> //to find maximum of vector
 
 int PossibleGames(std::string file_path, std::map<std::string, int> colors) // input a dictionary
 {
@@ -27,7 +27,7 @@ int PossibleGames(std::string file_path, std::map<std::string, int> colors) // i
         std::string line;
         while (getline(inputFile, line))
         {
-           // std::cout<<"--------"<<std::endl;
+            // std::cout<<"--------"<<std::endl;
             bool possible = true; // assume every game is possible at first
             auto pos = line.find("Game");
 
@@ -44,12 +44,12 @@ int PossibleGames(std::string file_path, std::map<std::string, int> colors) // i
                     // std::cout << "integer " << ID << std::endl;
                 }
 
-               // std::cout <<"Game "<<ID<<std::endl;
+                // std::cout <<"Game "<<ID<<std::endl;
 
                 std::vector<std::string>::iterator iter = key.begin();
                 for (iter; iter < key.end(); iter++)
                 {
-                    
+
                     auto colorPos = line.find(*iter);
 
                     while (colorPos != std::string::npos)
@@ -57,30 +57,28 @@ int PossibleGames(std::string file_path, std::map<std::string, int> colors) // i
 
                         // Update the starting position for the next search
 
-                        
                         auto noPos = line.find_first_of("0123456789", colorPos - 3); // position of number
                         if (noPos != std::string::npos)
                         {
-                           // std::cout << "adding "<<*iter<< " "<<std::stoi( line.substr(noPos))<<std::endl;
-                            int amount = std::stoi( line.substr(noPos));
+                            // std::cout << "adding "<<*iter<< " "<<std::stoi( line.substr(noPos))<<std::endl;
+                            int amount = std::stoi(line.substr(noPos));
 
                             // if already one color is already above the limit, the game won't work.
                             if (amount > colors.find(*iter)->second)
                             {
                                 possible = false; // game won't work
-                                //std::cout<<"not fulfilled"<<std::endl;
+                                // std::cout<<"not fulfilled"<<std::endl;
                                 break;
                             }
-
                         }
                         colorPos = line.find(*iter, colorPos + 1);
                     }
-                    
                 }
 
-                if (possible==true){
+                if (possible == true)
+                {
                     possibleGames.push_back(ID);
-                   // std::cout<<"fulfilled"<<std::endl;
+                    // std::cout<<"fulfilled"<<std::endl;
                 }
             }
         }
@@ -92,7 +90,6 @@ int PossibleGames(std::string file_path, std::map<std::string, int> colors) // i
 
     return sumID;
 }
-
 
 int FewestNumberOfCubes(std::string file_path, std::vector<std::string> colors) // input a dictionary
 {
@@ -106,68 +103,42 @@ int FewestNumberOfCubes(std::string file_path, std::vector<std::string> colors) 
         std::string line;
         while (getline(inputFile, line))
         {
-            std::cout<<"--------"<<std::endl;
-            std::vector<int> minimumColors;
+          
             int product = 1;
-            
+
             auto pos = line.find("Game");
-
-            if (pos != std::string::npos)
+            std::vector<std::string>::iterator iter = colors.begin();
+            for (iter; iter < colors.end(); iter++)
             {
-                // extract Game ID
-                auto intPos = line.find_first_of("0123456789", pos + 4);
-                int ID;
-                if (intPos != std::string::npos)
+                std::vector<int> amounts;
+                auto colorPos = line.find(*iter);
+
+                while (colorPos != std::string::npos)
                 {
 
-                    std::string intString = line.substr(intPos);
-                    ID = std::stoi(intString); // convert ID string to integer
-                    // std::cout << "integer " << ID << std::endl;
-                }
-
-                std::cout <<"Game "<<ID<<std::endl;
-
-                std::vector<std::string>::iterator iter = colors.begin();
-                for (iter; iter < colors.end(); iter++)
-                {
-                    std::vector<int> amounts;
-                    auto colorPos = line.find(*iter);
-
-                    while (colorPos != std::string::npos)
+                    auto noPos = line.find_first_of("0123456789", colorPos - 3); // position of number
+                    if (noPos != std::string::npos)
                     {
+                        // std::cout << "adding "<<*iter<< " "<<std::stoi( line.substr(noPos))<<std::endl;
+                        int amount = std::stoi(line.substr(noPos));
+                        amounts.push_back(amount);
 
-                        
-                         auto noPos = line.find_first_of("0123456789", colorPos - 3); // position of number
-                        if (noPos != std::string::npos)
-                        {
-                           // std::cout << "adding "<<*iter<< " "<<std::stoi( line.substr(noPos))<<std::endl;
-                            int amount = std::stoi( line.substr(noPos));
-                            amounts.push_back(amount);
-
-                            // if already one color is already above the limit, the game won't work.
-                        
-                        }
-                        colorPos = line.find(*iter, colorPos + 1);
+                       
                     }
-
-                    int minimum = *max_element(amounts.begin(), amounts.end());
-                    std::cout<<"Minimum of "<<*iter<< ": "<< minimum <<std::endl;
-                    product *= minimum;
-                    
+                    colorPos = line.find(*iter, colorPos + 1);
                 }
-                products.push_back(product);
 
-
-               
+                int minimum = *max_element(amounts.begin(), amounts.end());
+                // std::cout<<"Minimum of "<<*iter<< ": "<< minimum <<std::endl;
+                product *= minimum;
             }
-
-            
+            products.push_back(product);
         }
     }
 
     inputFile.close();
     int sum;
-    sum = accumulate(products.begin(),products.end(), 0);
-   
-    return sum ;
+    sum = accumulate(products.begin(), products.end(), 0);
+
+    return sum;
 }

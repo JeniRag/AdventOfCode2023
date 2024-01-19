@@ -9,28 +9,37 @@ class AlmanacList
 {
 
 private:
-    std::vector<long> mSeeds;
-    std::vector<std::vector<long>> mSeedToSoil, mSoilToFertilizer, mFertilizerToWater, mWaterToLight, mLightToTemperature, mTemperatureToHumidity, mHumidityToLocation;
+    std::vector<int64_t> mSeeds;
+    std::vector<int64_t> mSeedsRanges; //for task 2
+    std::vector<std::vector<int64_t>> mSeedToSoil, mSoilToFertilizer, mFertilizerToWater, mWaterToLight, mLightToTemperature, mTemperatureToHumidity, mHumidityToLocation;
+    void getSeedRanges();
 
 public:
     friend class MyTestSuite;
     AlmanacList(); // constructor
 
     // Setters
-    void setSeeds(std::vector<long> seeds);
-    void setSTS(std::vector<std::vector<long>> arrays);
-    void setSTF(std::vector<std::vector<long>> arrays);
-    void setFTW(std::vector<std::vector<long>> arrays);
-    void setWTL(std::vector<std::vector<long>> arrays);
-    void setLTT(std::vector<std::vector<long>> arrays);
-    void setTTH(std::vector<std::vector<long>> arrays);
-    void setHTL(std::vector<std::vector<long>> arrays);
+    void setSeeds(std::vector<int64_t> seeds);
+    void setSTS(std::vector<std::vector<int64_t>> arrays);
+    void setSTF(std::vector<std::vector<int64_t>> arrays);
+    void setFTW(std::vector<std::vector<int64_t>> arrays);
+    void setWTL(std::vector<std::vector<int64_t>> arrays);
+    void setLTT(std::vector<std::vector<int64_t>> arrays);
+    void setTTH(std::vector<std::vector<int64_t>> arrays);
+    void setHTL(std::vector<std::vector<int64_t>> arrays);
 
-    // MEthods
-    long map(long input, Category currentCategory);
-    long getLocation(long input);
+    // Methods
+    int64_t map(int64_t input, Category currentCategory);
+    int64_t mapNoForLoop(int64_t input, Category currentCategory);
+    int64_t getLocation(int64_t input);
 
-    long getLowestLocationNumber();
+    int64_t getLowestLocationNumber();
+    int64_t getLowestLocationNumberFromSeedRanges();
+
+    int64_t getLocationNoForLoop(int64_t input)
+
+
+    
 
 };
 

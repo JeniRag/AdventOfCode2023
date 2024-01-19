@@ -36,8 +36,8 @@ void ReadInput(std::string file_path, AlmanacList& aList)
     std::string humidityToLocationExpression = "humidity-to-location map:";
 
     // vectors to store input
-    std::vector<long> seeds;
-    std::vector<std::vector<long>> seedToSoil, soilToFertilizer, fertilizerToWater, waterToLight, lightToTemperature, temperatureToHumidity, humidityToLocation;
+    std::vector<int64_t> seeds;
+    std::vector<std::vector<int64_t>> seedToSoil, soilToFertilizer, fertilizerToWater, waterToLight, lightToTemperature, temperatureToHumidity, humidityToLocation;
 
     Category currentCategory = Seed;
 
@@ -67,7 +67,7 @@ void ReadInput(std::string file_path, AlmanacList& aList)
                     std::string seedNumberString = line.substr(intPos, intEndPos - intPos); // extract int
                     seedNumberString = std::regex_replace(seedNumberString, std::regex("\\r\\n|\\r|\\n"), "");
                     
-                    long seedNumber = std::stol(seedNumberString); // convert string to integer
+                    int64_t seedNumber = std::stol(seedNumberString); // convert string to integer
                     seeds.push_back(seedNumber);                  // store see Number in vector
 
                     intPos = line.find_first_of("0123456789", intEndPos);
@@ -112,7 +112,7 @@ void ReadInput(std::string file_path, AlmanacList& aList)
                 continue;
             }
 
-            std::vector<long> row;
+            std::vector<int64_t> row;
 
             if (currentCategory != Seed)
             {
@@ -124,7 +124,7 @@ void ReadInput(std::string file_path, AlmanacList& aList)
                     auto digitEndPos = line.find_first_not_of("0123456789", digitPos);
                     std::string digitString = line.substr(digitPos, digitEndPos - digitPos);
                     digitString = std::regex_replace(digitString, std::regex("\\r\\n|\\r|\\n"), "");
-                    long digit = std::stol(digitString);
+                    int64_t digit = std::stol(digitString);
 
                     row.push_back(digit);
 
@@ -179,12 +179,24 @@ void ReadInput(std::string file_path, AlmanacList& aList)
     aList.setHTL(humidityToLocation);
 }
 
-long FindLowestLocation(std::string file_path)
+
+/*
+Reads input file and searches for the lowest location number after mapping the seeds.
+*/
+int64_t FindLowestLocation(std::string file_path)
 {
 
-    AlmanacList aList;
+    AlmanacList aList; //empty class
 
-    ReadInput(file_path, aList);
+    ReadInput(file_path, aList); //fills class with the input values
 
     return aList.getLowestLocationNumber();
+}
+
+int64_t FindLowestLocationFromRanges(std::string file_path){
+    AlmanacList aList; //empty class
+
+    ReadInput(file_path, aList); //fills class with the input values
+
+    return aList.getLowestLocationNumberFromSeedRanges();
 }

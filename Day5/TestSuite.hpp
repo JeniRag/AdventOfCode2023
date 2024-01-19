@@ -11,7 +11,7 @@ public:
     void TestReadInput(void)
     {
 
-        std::vector<std::vector<long>> expected{
+        std::vector<std::vector<int64_t>> expected{
             {50, 98, 2},
             {52, 50, 48}};
         std::string example_file = "./data/example1.txt";
@@ -35,7 +35,7 @@ public:
     void TesFertilizerMapp(void)
     {
 
-        std::vector<std::vector<long>> expected{
+        std::vector<std::vector<int64_t>> expected{
             {49, 53, 8},
             {0, 11, 42},
             {42, 0, 7},
@@ -60,8 +60,9 @@ public:
 
     void TestMap(void)
     {
-        long output;
-        long expected = 81;
+        int64_t output, output2;
+        int64_t expected = 81;
+        int64_t expected2= 84;
         std::string example_file = "./data/example1.txt";
 
         AlmanacList aList;
@@ -69,32 +70,50 @@ public:
         ReadInput(example_file, aList);
         output = aList.map(79, SeedToSoil);
         TS_ASSERT_EQUALS(output, expected);
+        
+        output2 = aList.map(82, SeedToSoil);
+        TS_ASSERT_EQUALS(output2, expected2);
+
+
     }
     void TestGetLocation(void)
     {
-        long output;
-        long output2;
-
-        long expected = 82;
-        long expected2 = 43;
+        std::vector<int64_t> inputs {79, 14, 82};
+        std::vector<int64_t> expected {82, 43, 46};
+        //      std::vector<int64_t> inputs { 82};
+        // std::vector<int64_t> expected { 46};
+        
         std::string example_file = "./data/example1.txt";
 
         AlmanacList aList;
 
         ReadInput(example_file, aList);
-        output = aList.getLocation(79);
-        TS_ASSERT_EQUALS(output, expected);
 
-        output2 = aList.getLocation(14);
-        TS_ASSERT_EQUALS(output2, expected2);
-    }
-    void TestFindLowestLocation(void)
-    {
-        int output;
-        int expected = 35;
-        std::string example_file = "./data/example1.txt";
+        for (int i=0; i<inputs.size(); i++){
 
-        output = FindLowestLocation(example_file);
-        TS_ASSERT_EQUALS(output, expected);
+            int output = aList.getLocation(inputs[i]);
+            TS_ASSERT_EQUALS(output, expected[i]);
+        }
+       
+
     }
+    // void TestFindLowestLocation(void)
+    // {
+    //     int output;
+    //     int expected = 35;
+    //     std::string example_file = "./data/example1.txt";
+
+    //     output = FindLowestLocation(example_file);
+    //     TS_ASSERT_EQUALS(output, expected);
+    // }
+
+    // void TestFindLowestLocationFromRanges(void)
+    // {
+    //     int output;
+    //     int expected = 46;
+    //     std::string example_file = "./data/example1.txt";
+
+    //     output = FindLowestLocationFromRanges(example_file);
+    //     TS_ASSERT_EQUALS(output, expected);
+    // }
 };

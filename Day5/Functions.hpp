@@ -8,7 +8,8 @@
 //Header file (Function declaration)
 
 void ReadInput(std::string file_path, AlmanacList &aList);
-long FindLowestLocation(std::string file_path);
+int64_t FindLowestLocation(std::string file_path);
+int64_t FindLowestLocationFromRanges(std::string file_path);
 
 
 

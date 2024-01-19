@@ -5,8 +5,17 @@
 #include <vector>
 #include <map>
 #include "Functions.hpp"
+#include <cassert>
 
 // Function definitions/ implementations
+
+/**
+* @brief For each line of the input file, builds the digit and returns the sum of it all.
+*
+* @param file_path directory path to the input file
+* @return the sum of all the extracted digits.
+
+**/
 
 int Trebuchet(std::string file_path)
 {
@@ -16,6 +25,13 @@ int Trebuchet(std::string file_path)
     // open file
     inputFile.open(file_path, std::ios::in);
 
+    // if file can't be opened pring an error
+    if (!inputFile.is_open())
+    {
+        std::cerr << "Error opening file: " << file_path << std::endl;
+        return 0;
+    }
+
     // Check if file is open
     if (inputFile.is_open())
     {
@@ -23,9 +39,10 @@ int Trebuchet(std::string file_path)
         while (getline(inputFile, line))
         {
             std::vector<int> integers; // To store extracted integers
-            int a;
+            int extractedNumber;
 
             std::string currentNumber;
+            // iterate over each character
             for (char character : line)
             {
                 if (isdigit(character))
@@ -35,21 +52,24 @@ int Trebuchet(std::string file_path)
                 }
             }
 
+            assert(integers.size() > 0); // check that each line contained integers
+
+            int first_digit, last_digit;
+            first_digit = integers[0];
+
             if (integers.size() == 1)
             { // only one integer
-                a = integers[0] * 10 + integers[0];
+                last_digit = integers[0];
             }
-
-            else if (integers.size() >= 2)
+            else
             {
-                int x1 = integers[0];
-                int x2 = integers.back(); // last element
-
-                a = x1 * 10 + x2;
+                last_digit = integers.back(); // last element of vector
             }
-            //  std::cout<<"a = "<< a<< std::endl;
-            sum += a;
-            a = 0;
+
+            extractedNumber = first_digit * 10 + last_digit;
+
+            sum += extractedNumber;
+            extractedNumber = 0;
         }
     }
 
@@ -58,22 +78,26 @@ int Trebuchet(std::string file_path)
     return sum;
 }
 
+/**
+ * @brief Extracts the number and consideres also digit, which are written in letters. Then it returns the sum of the extracted values.
+ *
+ * @param file_path directory of the input file
+ * @return ** int the sum of the extracted values
+ */
+
 int ReadStringAsInt(std::string file_path)
 {
     // Define dictionary of string and integer
     std::map<std::string, int> str_to_int = {
-       {"one", 1}, {"two", 2}, {"three", 3}, {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7}, {"eight", 8}, {"nine", 9}};
+        {"one", 1}, {"two", 2}, {"three", 3}, {"four", 4}, {"five", 5}, {"six", 6}, {"seven", 7}, {"eight", 8}, {"nine", 9}};
 
     // To save key and value of dict in seperate list
     std::vector<std::string> key;
-   
 
     // extract key, values and store in list
     for (std::map<std::string, int>::iterator it = str_to_int.begin(); it != str_to_int.end(); ++it)
     {
         key.push_back(it->first);
-      //  std::cout<<"added to key list: "<<it -> first<<std::endl;
-      
     }
 
     std::fstream inputFile;
@@ -83,6 +107,12 @@ int ReadStringAsInt(std::string file_path)
 
     // open file
     inputFile.open(file_path, std::ios::in);
+
+    if (!inputFile.is_open())
+    {
+        std::cerr << "Error opening file: " << file_path << std::endl;
+        return 0;
+    }
 
     // Check if file is open
     if (inputFile.is_open())
@@ -95,7 +125,7 @@ int ReadStringAsInt(std::string file_path)
             std::vector<int> integers; // To store extracted integers
             std::map<int, int> index_and_integers;
 
-            int a;
+            int extractedNumber;
 
             // run for loop from 0 to end of vector
             std::vector<std::string>::iterator iter = key.begin();
@@ -103,21 +133,19 @@ int ReadStringAsInt(std::string file_path)
             {
                 // access value in the memory to which the pointer
                 // is referencing with *iter
-               int currentNumber;
-              auto pos = line.find(*iter); //returns only the first occurence
+                int currentNumber;
+                auto pos = line.find(*iter); // returns only the first occurence
 
-              
-            while (pos != std::string::npos)
+                while (pos != std::string::npos)
                 {
-                    std::cout<< "position of "<<*iter<< " is "<< pos <<std::endl;
+                    
                     currentNumber = str_to_int.find(*iter)->second; // access to value by using key
 
                     index_and_integers.insert({pos, currentNumber});
 
                     // Update the starting position for the next search
-                  
-    
-                      pos = line.find(*iter, pos + 1);
+
+                    pos = line.find(*iter, pos + 1);
                 }
             }
 
@@ -134,32 +162,28 @@ int ReadStringAsInt(std::string file_path)
                 index_int += 1;
             }
 
-
-            //map sorts already it key value pairs based on the order of keys
+            // map sorts already it key value pairs based on the order of keys
             for (std::map<int, int>::iterator it = index_and_integers.begin(); it != index_and_integers.end(); ++it)
             {
-              //  std::cout <<"index: "<<it->first << ", value: "<< it->second<<std::endl;
+                //  std::cout <<"index: "<<it->first << ", value: "<< it->second<<std::endl;
                 integers.push_back(it->second);
             }
 
+            int first_digit, last_digit;
+            first_digit = integers[0];
+
             if (integers.size() == 1)
             { // only one integer
-                a = integers[0] * 10 + integers[0];
+                last_digit = integers[0];
             }
-
-            else if (integers.size() >= 2)
+            else
             {
-                int x1 = integers[0];
-                int x2 = integers.back(); // last element
-
-                a = x1 * 10 + x2;
+                last_digit = integers.back(); // last element of vector
             }
 
-           std::cout << "a = "<<a <<std::endl;
-            sum += a;
-            //a = 0;
+            extractedNumber = first_digit * 10 + last_digit;
 
-            std::cout <<"--------"<<std::endl;
+            sum += extractedNumber;
         }
     }
 

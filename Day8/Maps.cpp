@@ -11,6 +11,13 @@ Maps::Maps(std::string directions, std::map<std::string, std::vector<std::string
     mDictionary = dictionary;
 }
 
+/**
+ * @brief returns the number of steps needed to reach the destinatino
+ * 
+ * @param start string that contains the starting node
+ * @param destination string that contains the destination node
+ * @return ** int 
+ */
 int Maps::followMap(std::string start, std::string destination)
 {
 

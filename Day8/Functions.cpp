@@ -9,7 +9,14 @@
 #include <regex>
 #include <algorithm>
 #include "Maps.hpp"
-
+/**
+ * @brief Reads the input file and parses it.
+ * 
+ * @param file_path directory to input data
+ * @param directions string to store the direction (first line of the input file)
+ * @param dictionary dictionary to store the individual nodes
+ * @return ** void 
+ */
 void readInput(std::string file_path, std::string &directions, std::map<std::string, std::vector<std::string>> &dictionary)
 {
     // Parsing the input file
@@ -72,6 +79,14 @@ void readInput(std::string file_path, std::string &directions, std::map<std::str
     return;
 }
 
+/**
+ * @brief Get the Number Of Steps needed to reach destination
+ * 
+ * @param file_path directory to input data
+ * @param start string that contains the starting node
+ * @param destination string that contains the destination node
+ * @return ** int 
+ */
 int getNumberOfSteps(std::string file_path, std::string start, std::string destination)
 {
 

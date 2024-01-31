@@ -9,7 +9,14 @@
 #include <regex>
 #include <algorithm>
 
-void readInput(std::string file_path, std::vector<std::vector<int>> &inputArrays)
+/**
+ * @brief Parses the input file and stores the values in an 2D vector.
+ *
+ * @param file_path
+ * @param inputArrays refernce to the Matrix to store the values.
+ * @return ** void
+ */
+void readInput(std::string file_path, std::vector<std::vector<long>> &inputArrays)
 {
     // Parsing the input file
 
@@ -33,20 +40,20 @@ void readInput(std::string file_path, std::vector<std::vector<int>> &inputArrays
 
         while (getline(inputFile, line))
         {
-            std::vector<int> oneRow;
+            std::vector<long> oneRow;
 
             // extract the numerical values
-            auto intPos = line.find_first_of("1234567890", 0);
+            auto intPos = line.find_first_of("-1234567890", 0); //make sure it also reads the minus sign
 
             while (intPos != std::string::npos)
             {
-                auto endPos = line.find_first_not_of("1234567890", intPos);
+                auto endPos = line.find_first_not_of("-1234567890", intPos);
 
                 std::string intString = line.substr(intPos, endPos - intPos);
-                int element = std::stoi(intString);
+                long element = std::stoi(intString);
                 oneRow.push_back(element);
 
-                intPos = line.find_first_of("1234567890", endPos);
+                intPos = line.find_first_of("-1234567890", endPos);
 
                 // key = std::regex_replace(key, std::regex("[\\r\\n\\s]+"), ""); // remove newline characte and spaces
             }
@@ -57,29 +64,42 @@ void readInput(std::string file_path, std::vector<std::vector<int>> &inputArrays
     return;
 }
 
-int extrapolateNextValue(const std::vector<int> &oneArray)
+bool allElementsSame(const std::vector<long>& vec) {
+    auto it = std::adjacent_find(vec.begin(), vec.end(), std::not_equal_to<int>());
+    return it == vec.end();
+}
+
+
+
+long extrapolateNextValue(const std::vector<long> &oneArray)
 {
 
     int N = oneArray.size();
-    std::vector<std::vector<int>> allDifferences;
+
+    std::vector<std::vector<long>> allDifferences;
+
     allDifferences.push_back(oneArray);
-    bool allZero = false;
+   // bool allZero = false;
+    bool allElementsEqual = false;
+   
 
-    int index =0;
-
-    while (!allZero && N > 1)
+    while (!allElementsEqual)
     {
-        std::vector<int> differences(N);
-        std::adjacent_difference(allDifferences[index].begin(), allDifferences[index].end(), differences.begin()); // y0=x0, y1= x1- x0
-        differences.erase(differences.begin());                                                  // removes first element
-
-        // check if all values 0
-        allZero = std::all_of(differences.begin(), differences.end(), [](const int element)
-                              { return element == 0; });
-        N = differences.size();
+       assert(N>1);
+        std::vector<long> differences(N);
+        std::adjacent_difference(allDifferences.back().begin(), allDifferences.back().end(), differences.begin()); // y0=x0, y1= x1- x0
+        differences.erase(differences.begin());                                                                    // removes first element
+        
         allDifferences.push_back(differences);
+        
+        // check if all values 0
+        // allZero = std::all_of(differences.begin(), differences.end(), [](const long element)
+        //                       { return element == 0; });
 
-        index += 1;
+        allElementsEqual = allElementsSame(differences);
+
+        N = differences.size();
+     
     }
 
     // for (int i=0; i<allDifferences.size(); i++){
@@ -89,7 +109,7 @@ int extrapolateNextValue(const std::vector<int> &oneArray)
     //     std::cout<<std::endl;
     // }
 
-    int interpolatedElement = 0; // allDifferences.back().back();
+    long interpolatedElement =  allDifferences.back().back();
 
     for (int i = allDifferences.size() - 1; i > 0; i--)
     {
@@ -100,16 +120,66 @@ int extrapolateNextValue(const std::vector<int> &oneArray)
     return interpolatedElement;
 }
 
-int getSum(std::string file_path)
+long extrapolateBack(const std::vector<long> &oneArray)
 {
-    std::vector<std::vector<int>> inputArray;
+
+    int N = oneArray.size();
+
+    std::vector<std::vector<long>> allDifferences;
+
+    allDifferences.push_back(oneArray);
+   // bool allZero = false;
+    bool allElementsEqual = false;
+   
+
+    while (!allElementsEqual)
+    {
+       assert(N>1);
+        std::vector<long> differences(N);
+        std::adjacent_difference(allDifferences.back().begin(), allDifferences.back().end(), differences.begin()); // y0=x0, y1= x1- x0
+        differences.erase(differences.begin());                                                                    // removes first element
+        
+        allDifferences.push_back(differences);
+        
+        // check if all values 0
+        // allZero = std::all_of(differences.begin(), differences.end(), [](const long element)
+        //                       { return element == 0; });
+
+        allElementsEqual = allElementsSame(differences);
+
+        N = differences.size();
+     
+    }
+
+
+    long interpolatedElement =  allDifferences.back().front();
+
+    for (int i = allDifferences.size() - 1; i > 0; i--)
+    {
+
+        interpolatedElement = allDifferences[i - 1].front() - interpolatedElement;
+    }
+
+    return interpolatedElement;
+}
+
+
+
+long getSum(std::string file_path)
+{
+
+    // TODO: write enum for task an choose extrapolate function.
+    std::vector<std::vector<long>> inputArray;
     readInput(file_path, inputArray);
+
     std::cout << std::endl;
-    int sum = 0;
+    
+    long sum = 0;
     for (int i = 0; i < inputArray.size(); i++)
     {
-        int value = extrapolateNextValue(inputArray[i]);
-       
+        
+        long value = extrapolateNextValue(inputArray[i]);
+
         sum += value;
     }
 

@@ -165,7 +165,7 @@ long extrapolateBack(const std::vector<long> &oneArray)
 
 
 
-long getSum(std::string file_path)
+long getSum(std::string file_path, long(*extrapolate)(const std::vector<long> &oneArray))
 {
 
     // TODO: write enum for task an choose extrapolate function.
@@ -178,7 +178,7 @@ long getSum(std::string file_path)
     for (int i = 0; i < inputArray.size(); i++)
     {
         
-        long value = extrapolateNextValue(inputArray[i]);
+        long value = extrapolate(inputArray[i]); //extrapolateNextValue(inputArray[i]);
 
         sum += value;
     }

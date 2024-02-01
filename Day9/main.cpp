@@ -7,9 +7,10 @@ int main(int argc, char* argv[]){
 
     std::string file_path="./data/task1_input.txt";
     
-    output = getSum(file_path);
+
+    output = getSum(file_path, extrapolateNextValue);
     std::cout <<"The sum of task 1: "<< output <<std::endl;
 
-    // output2 = getNumberOfStepsTask2(file_path);
-    // std::cout<< "The number of steps for task 2: "<< output2<<std::endl;
+    output2 = getSum(file_path, extrapolateBack);
+    std::cout<< "The sum of task 2: "<< output2<<std::endl;
 }

@@ -27,60 +27,45 @@ public:
         }
     }
 
-    void TestExtrapolateNextValue(void){
+    void TestExtrapolateNextValue(void)
+    {
 
         std::vector<long> oneArray = {0, 3, 6, 9, 12, 15};
-       long expected = 18;
+        long expected = 18;
         long output = extrapolateNextValue(oneArray);
 
         TS_ASSERT_EQUALS(expected, output);
-
-
     }
 
-    
-    void TestMyExample(void){
-
-        std::string example_file = "./data/myExample1.txt";
-   
-        
-        std::vector<std::vector<long>> inputArray;
-        readInput(example_file, inputArray);
-             
-        long output = extrapolateNextValue(inputArray.back());
-
-
-
-    }
-
-
-    void TestTask1(void){
+    void TestTask1(void)
+    {
         std::string example_file = "./data/example1.txt";
-        int expected= 114;
-        int output = getSum(example_file);
+        int expected = 114;
+        int output = getSum(example_file, extrapolateNextValue);
         TS_ASSERT_EQUALS(expected, output);
-
-
     }
 
-    void TestExtrapolateBack(void){
+    void TestExtrapolateBack(void)
+    {
 
-        std::vector<long> oneArray =  {10, 13, 16, 21, 30, 45};
-       long expected = 5;
-        long output = extrapolateBack(oneArray);
+        std::vector<std::vector<long>> inputArrays = {{0, 3, 6, 9, 12, 15},
+                                         {1, 3, 6, 10, 15, 21},
+                                         {10, 13, 16, 21, 30, 45}};
 
-        TS_ASSERT_EQUALS(expected, output);
+        std::vector<long> expected = {-3, 0, 5};
 
-
+        for (int i = 0; i < inputArrays.size(); i++)
+        {
+            long output = extrapolateBack(inputArrays[i]);
+            TS_ASSERT_EQUALS(expected[i], output);
+        }
     }
 
-       void TestTask2(void){
+    void TestTask2(void)
+    {
         std::string example_file = "./data/example1.txt";
-        int expected= 114;
-        int output = getSum(example_file);
+        int expected = 2;
+        int output = getSum(example_file, extrapolateBack);
         TS_ASSERT_EQUALS(expected, output);
-
-
     }
-    
 };
